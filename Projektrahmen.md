@@ -7,4 +7,4 @@
 + Die Aufgabe soll in Teamarbeit erledigt werden
 
 ## Zeitrahmen
-+ Bis eine Woche vor den Zeugniskonferenzen
++ Bis 2022-04-26
