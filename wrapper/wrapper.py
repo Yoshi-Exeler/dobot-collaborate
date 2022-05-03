@@ -47,7 +47,7 @@ class DobotWrapper:
             dType.SetHOMEParams(self.__conn, 250, 0, 50, 0, isQueued=1)
             dType.SetHOMECmd(self.__conn, 0, isQueued=1)
             print("[Wrapper] command queue length: ", len(
-                dType.GetQueuedCmdMotionFinish(self.__conn), " awaiting homing completion"))
+            dType.GetQueuedCmdMotionFinish(self.__conn), " awaiting homing completion"))
             self.awaitMotionCompleted()  # block until homing has completed
             return True
         else:
