@@ -1,2 +1,2 @@
 # dobot-collaborate
-two dobot magicians collaborating to assemble a small car
+Two Dobot Magicians collaborate to allow one player to play tic-tac-toe against an algorithm
