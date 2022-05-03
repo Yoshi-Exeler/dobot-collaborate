@@ -26,7 +26,6 @@ class DobotWrapper:
     __comport: str
     __state: any
     __conn: any
-    __cmdIndex: int
 
     def __init__(self, comport: str) -> None:
         self.__conn = dType.load()
