@@ -41,8 +41,7 @@ class DobotWrapper:
                   self.__comport, " successfull, setting up...")
             dType.SetQueuedCmdClear(self.__conn)
             dType.SetQueuedCmdStartExec(self.__conn)
-            dType.SetPTPCmdEx(self.__conn, 0, 193,  0,  23, -
-                              0.264, 1)  # why do we do this?
+            dType.SetPTPCmdEx(self.__conn, 0, 193,  0,  23, - 0.264, 1)  # why do we do this?
             dType.dSleep(100)
             print("[Wrapper] dobot on port ", self.__comport, " now homing")
             dType.SetHOMEParams(self.__conn, 250, 0, 50, 0, isQueued=1)
@@ -74,7 +73,6 @@ class DobotWrapper:
         pass
 
     # awaitMotionComplated blocks until all queued commands have been executed
-
     def awaitMotionCompleted(self) -> None:
         # why does dType.GetQueuedCmdCurrentIndex() return a list of ints???
         # check that the queue entries are actually removed once the motion is finisheds
