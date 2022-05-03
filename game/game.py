@@ -1,5 +1,6 @@
 from time import sleep
 from typing import List
+import asyncio
 
 PLAYER_ONE_SYMBOL = 'O'
 PLAYER_TWO_SYMBOL = "X"
@@ -15,16 +16,18 @@ class TicTacToe:
         pass
 
     # blocks until its your turn
-    def awaitTurn(self, playerOne: bool):
+    async def awaitTurn(self, playerOne: bool):
         while (not self.__playerOneTurn == playerOne):
-            sleep(0.25)
+            await asyncio.sleep(0.25)
         pass
 
     def placeSymbol(self, position: int) -> bool:
         # places the symbol of the active player at the specified position,
         # ensuring that the position is empty. If the position is not empty, returns false
-        # Next, passes the turn to the next player.
         pass
+
+    def passTurn(self):
+        self.__playerOneTurn = not self.__playerOneTurn
 
     def getBoard(self) -> List[str]:
         return self.__board
