@@ -69,12 +69,11 @@ class DobotWrapper:
         # add our command to the command queue
         dType.SetPTPCmdEx(self.__conn, 2, target.X,
                           target.Y,  target.Z, target.R, 1)
-        self.awaitMotionCompleted()  # block until the move has completed
         pass
 
     # moveLeft will move the robot left, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
-    async def moveLeft(self, amount: float) -> None:
+    def moveLeft(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
         # apply the delta, respecting inverts
@@ -83,12 +82,12 @@ class DobotWrapper:
         else:
             position.Y = position.Y - amount
         # run the move
-        await self.move(position)
+        self.move(position)
 
 
     # moveRight will move the robot right, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
-    async def moveRight(self, amount: float) -> None:
+    def moveRight(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
         # apply the delta, respecting inverts
@@ -97,12 +96,12 @@ class DobotWrapper:
         else:
             position.Y = position.Y + amount
         # run the move
-        await self.move(position)
+        self.move(position)
 
 
     # moveForward will move the robot forwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
-    async def moveForward(self, amount: float) -> None:
+    def moveForward(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
         # apply the delta, respecting inverts
@@ -111,12 +110,12 @@ class DobotWrapper:
         else:
             position.X = position.X + amount
         # run the move
-        await self.move(position)
+        self.move(position)
 
 
     # moveBackward will move the robot backwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
-    async def moveBackward(self, amount: float) -> None:
+    def moveBackward(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
         # apply the delta, respecting inverts
@@ -125,30 +124,30 @@ class DobotWrapper:
         else:
             position.X = position.X - amount
         # run the move
-        await self.move(position)
+        self.move(position)
 
 
     # moveUp will move the robot up. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
-    async def moveUp(self, amount: float) -> None:
+    def moveUp(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
         # apply the delta
         position.Z = position.Z + amount
         # run the move
-        await self.move(position)
+        self.move(position)
 
 
 
     # moveDown will move the robot down. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
-    async def moveDown(self, amount: float) -> None:
+    def moveDown(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
         # apply the delta
         position.Z = position.Z - amount
         # run the move
-        await self.move(position)
+        self.move(position)
 
     # setSuckState sets the state of the sucktion cup on the dobot magician
     def setSuckState(self, state: bool) -> None:
@@ -169,8 +168,7 @@ class DobotWrapper:
     # getPosition returns the current position of the dobot
     def getPosition(self) -> Position:
         pos = dType.GetPose(self.__conn)
-        ret = Position(pos[0], pos[1], pos[2], pos[3])
-        pass
+        return Position(pos[0], pos[1], pos[2], pos[3])
 
     # getConnectionState returns the current state of the connection with the robot
     def getConnectionState(self) -> str:
