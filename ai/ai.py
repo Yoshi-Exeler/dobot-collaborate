@@ -28,6 +28,6 @@ class AIPlayer:
             self.__game.passTurn()
         pass
 
-    def __computeTurn() -> int:
+    def __computeTurn(self) -> int:
         # returns the index of the cell that the AI wants to place a symbol in
         pass
