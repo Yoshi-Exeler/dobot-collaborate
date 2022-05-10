@@ -1,13 +1,47 @@
+from tkinter import SEL_FIRST
 from game.game import TicTacToe
+from typing import List
+from wrapper.wrapper import DobotWrapper
 
 class Renderer:
+    __renderState: List[str]
+    __robotOne: DobotWrapper # the first player's dobot
+    __robotTwo: DobotWrapper # the second player's dobot
+    __toggle: bool # switch dobots after every move made
 
-    def __init__(self):
+    def __init__(self,robotOne: DobotWrapper, robotTwo: DobotWrapper):
+        self.__robotOne = robotOne
+        self.__robotTwo = robotTwo
+        self.__toggle = False
+        self.__renderState = List[str]
         pass
 
-    def render(game: TicTacToe):
+    def render(self,game: TicTacToe):
+        # first we print the state to stdout
         print(game.__board[0],game.__board[1],game.__board[2])
-        
         print(game.__board[3],game.__board[4],game.__board[5])
-        
         print(game.__board[6],game.__board[7],game.__board[8])
+        # get the cell where the last move was made
+        deltaCell = self.findDeltaCell(game)
+        # get the symbol that was last placed
+        symbolPlaced = game[deltaCell]
+        # place this symbol on the paper using the current player's dobot
+        self.__placeSymbol(deltaCell,symbolPlaced)
+        # update the render state
+        self.__renderState = game
+        # flip the toggle so the other dodot will be used next
+        self.__toggle = not self.__toggle
+
+    def findDeltaCell(self,game: TicTacToe) -> int:
+        for i in range(len(game.__board)):
+            if not game.__board[i] == self.__renderState[i]:
+                return i
+        return -1
+
+    def placeSymbol(self,index: int, symbol: str):
+        # get our dobot instance
+        robot = self.__robotOne
+        if self.__toggle:
+            robot = self.__robotTwo
+        # compute the position of the field in the physical world
+        

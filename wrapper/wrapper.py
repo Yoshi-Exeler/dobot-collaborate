@@ -1,3 +1,4 @@
+from turtle import pos
 from dobot import DobotDllType as dType
 
 CON_STR = {
@@ -26,8 +27,12 @@ class DobotWrapper:
     __comport: str
     __state: any
     __conn: any
+    __xinverted: bool
+    __yinverted: bool
 
-    def __init__(self, comport: str) -> None:
+    def __init__(self, comport: str,xinverted: bool, yinverted: bool) -> None:
+        self.__xinverted = xinverted
+        self.__yinverted = yinverted
         self.__conn = dType.load()
         self.__comport = comport
         pass
@@ -41,13 +46,14 @@ class DobotWrapper:
                   self.__comport, " successfull, setting up...")
             dType.SetQueuedCmdClear(self.__conn)
             dType.SetQueuedCmdStartExec(self.__conn)
-            dType.SetPTPCmdEx(self.__conn, 0, 193,  0,  23, - 0.264, 1)  # why do we do this?
+            dType.SetPTPCmdEx(self.__conn, 0, 193,  0,  23, -
+                              0.264, 1)  # why do we do this?
             dType.dSleep(100)
             print("[Wrapper] dobot on port ", self.__comport, " now homing")
             dType.SetHOMEParams(self.__conn, 250, 0, 50, 0, isQueued=1)
             dType.SetHOMECmd(self.__conn, 0, isQueued=1)
             print("[Wrapper] command queue length: ", len(
-            dType.GetQueuedCmdMotionFinish(self.__conn), " awaiting homing completion"))
+                dType.GetQueuedCmdMotionFinish(self.__conn), " awaiting homing completion"))
             self.awaitMotionCompleted()  # block until homing has completed
             return True
         else:
@@ -64,7 +70,85 @@ class DobotWrapper:
         self.awaitMotionCompleted()  # block until the move has completed
         pass
 
-    # setSuckState sets the state of the sucktion cup on the dobot magician
+    # moveLeft will move the robot left, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
+    # to run this synchronously use await.
+    async def moveLeft(self, amount: float) -> None:
+        # get the current position
+        position = self.getPosition()
+        # apply the delta, respecting inverts
+        if self.__yinverted:
+            position.Y = position.Y + amount
+        else:
+            position.Y = position.Y - amount
+        # run the move
+        await self.move(position)
+
+    
+    # moveRight will move the robot right, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
+    # to run this synchronously use await.
+    async def moveRight(self, amount: float) -> None:
+        # get the current position
+        position = self.getPosition()
+        # apply the delta, respecting inverts
+        if self.__yinverted:
+            position.Y = position.Y - amount
+        else:
+            position.Y = position.Y + amount
+        # run the move
+        await self.move(position)
+
+    
+    # moveForward will move the robot forwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
+    # to run this synchronously use await.
+    async def moveForward(self, amount: float) -> None:
+        # get the current position
+        position = self.getPosition()
+        # apply the delta, respecting inverts
+        if self.__xinverted:
+            position.X = position.X - amount
+        else:
+            position.X = position.X + amount
+        # run the move
+        await self.move(position)
+
+    
+    # moveBackward will move the robot backwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
+    # to run this synchronously use await.
+    async def moveBackward(self, amount: float) -> None:
+        # get the current position
+        position = self.getPosition()
+        # apply the delta, respecting inverts
+        if self.__xinverted:
+            position.X = position.X + amount
+        else:
+            position.X = position.X - amount
+        # run the move
+        await self.move(position)
+
+    
+    # moveUp will move the robot up. Like move, this action will run asynchronously by default. If you want
+    # to run this synchronously use await.
+    async def moveUp(self, amount: float) -> None:
+        # get the current position
+        position = self.getPosition()
+        # apply the delta
+        position.Z = position.Z + amount
+        # run the move
+        await self.move(position)
+
+    
+    
+    # moveDown will move the robot down. Like move, this action will run asynchronously by default. If you want
+    # to run this synchronously use await.
+    async def moveDown(self, amount: float) -> None:
+        # get the current position
+        position = self.getPosition()
+        # apply the delta
+        position.Z = position.Z - amount
+        # run the move
+        await self.move(position)
+
+        # setSuckState sets the state of the sucktion cup on the dobot magician
     def setSuckState(self, state: bool) -> None:
         conv_state = 0
         if (state):
