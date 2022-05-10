@@ -1,6 +1,7 @@
 from time import sleep
 from typing import List
 import asyncio
+from render.render import Renderer
 
 PLAYER_ONE_SYMBOL = 'O'
 PLAYER_TWO_SYMBOL = "X"
@@ -10,8 +11,10 @@ DEBUG = True
 class TicTacToe:
     __board: List[str]  # board representation
     __playerOneTurn: bool
+    __renderer: Renderer
 
-    def __init__(self):
+    def __init__(self, renderer: Renderer):
+        self.__renderer = renderer
         self.__playerOneTurn = True
         pass
 
@@ -24,6 +27,7 @@ class TicTacToe:
     def placeSymbol(self, position: int) -> bool:
         # places the symbol of the active player at the specified position,
         # ensuring that the position is empty. If the position is not empty, returns false
+        self.__renderer.render(self)
         pass
 
     def passTurn(self):
