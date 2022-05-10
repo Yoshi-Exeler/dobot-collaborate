@@ -3,6 +3,7 @@ from typing import List
 import asyncio
 from wrapper.wrapper import DobotWrapper, Position
 from game.game import *
+import math
 
 PLAYER_ONE_SYMBOL = 'O'
 PLAYER_TWO_SYMBOL = "X"
@@ -59,6 +60,12 @@ class Renderer:
         return -1
 
     async def placeSymbol(self, index: int, symbol: str):
+        # TODO we should probably pass most of these as parameters
+        # setting some measurements for the symbols
+        down = 10
+        corners = 16
+        size = 4
+
         # get our dobot instance
         robot = self.__robotOne
         if self.__toggle:
@@ -72,9 +79,59 @@ class Renderer:
                           pos.Z+offset.Z, pos.R+offset.R)
         # move to the target position
         await robot.move(target)
-        # draw the symbol
+        # draw the symbols
+        if symbol == "X":
+            self.drawX(robot, target, down, size)
+        elif symbol == "O":
+            self.drawO(robot, target, down, corners, size)
+        else:
+            print("Cannot draw symbols other thatn X or O")
         # move back to the starting position
         await robot.move(pos)
+    
+    def drawX(robot, target, deltaZ, size):
+        # defining the corner points for readability
+        upperX = target.X + size/2
+        lowerX = target.X - size/2
+        upperY = target.Y + size/2
+        lowerY = target.Y - size/2
+        zUp = target.Z
+        zDown = target.Z - deltaZ
+        r = target.r
+        
+        #actual drawing begins
+        robot.move(Position(upperX, upperY, zUp, r))
+        robot.moveDown(deltaZ)
+        robot.move(Position(lowerX, lowerY, zDown, r))
+        robot.moveUp(deltaZ)
+        robot.move(Position(lowerX, upperY, zUp, r))
+        robot.moveDown(deltaZ)
+        robot.move(Position(upperX, lowerY, zDown, r))
+        robot.moveUp(deltaZ)
+    
+    def drawO(robot, target, deltaZ, corners, size):
+        #draws a regular polygon with specified number of corners
+        #more corners make the polygon closer to a circle, but take longer
+        #circles would require a new, complicated movement function that cannot be achieved with PTP commands
+        
+        #getting in position
+        targetReady= Position(target.X, target.Y+size/2, target.Z, target.R)
+        zDown = target.Z-deltaZ
+        robot.move(targetReady)
+
+        for i in range(corners):
+            #transforms the polar coordinates into cartesian to find next corner
+            cornerX = target.X + size/2 * math.cos(i*2*math.pi/corners)
+            cornerY = target.Y + size/2 * math.sin(i*2*math.pi/corners)
+
+            #draws line to next corner
+            point = Position(cornerX, cornerY, zDown, target.r)
+            robot.move(point)
+        
+        robot.moveUp(deltaZ)
+
+
+
 
 
 

@@ -5,27 +5,30 @@ from ai.ai import AIPlayer
 from human.human import HumanPlayer
 import asyncio
 
-from wrapper.wrapper import DobotWrapper
+from wrapper.wrapper import DobotWrapper, Position
 
-print("[Init] connecting to dobots")
+async def main():
+    print("[Init] connecting to dobots")
 
-robotOne = DobotWrapper("COM4", False, False)
+    robotOne = DobotWrapper("COM4", False, False)
 
-sleep(3)
+    sleep(3)
 
-robotTwo = DobotWrapper("COM5", True, True)
-
-
-sleep(3)
-
-if not (robotOne.connect()):
-    print("[Init] connection with dobot one failed")
-    exit(1337)
+    robotTwo = DobotWrapper("COM5", True, True)
 
 
-if not (robotTwo.connect()):
-    print("[Init] connection with dobot two failed")
-    exit(1337)
+    sleep(3)
+
+    if not (robotOne.connect()):
+        print("[Init] connection with dobot one failed")
+        exit(1337)
+
+
+    if not (robotTwo.connect()):
+        print("[Init] connection with dobot two failed")
+        exit(1337)
+
+    await robotOne.move(Position(0,0,0,0))
 
 print("[Init] both dobots are homed and ready")
 
