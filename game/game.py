@@ -18,6 +18,7 @@ offsets.append(Position(50, 0, 0, 0))
 offsets.append(Position(-50, -50, 0, 0))
 offsets.append(Position(0, -50, 0, 0))
 offsets.append(Position(50, -50, 0, 0))
+DEBUG = True
 
 
 class Renderer:
@@ -38,6 +39,8 @@ class Renderer:
         print(board[0], board[1], board[2])
         print(board[3], board[4], board[5])
         print(board[6], board[7], board[8])
+        if DEBUG:
+            return
         # get the cell where the last move was made
         deltaCell = self.findDeltaCell(board)
         # get the symbol that was last placed
@@ -83,6 +86,7 @@ class TicTacToe:
     def __init__(self, renderer: Renderer):
         self.__renderer = renderer
         self.__playerOneTurn = True
+        self.__board = ["","","","","","","","",""]
         pass
 
     # blocks until its your turn
@@ -94,7 +98,7 @@ class TicTacToe:
     def placeSymbol(self, position: int) -> bool:
         # places the symbol of the active player at the specified position,
         # ensuring that the position is empty. If the position is not empty, returns false
-        self.__renderer.render(self)
+        self.__renderer.render(self.__board)
         pass
 
     def passTurn(self):
