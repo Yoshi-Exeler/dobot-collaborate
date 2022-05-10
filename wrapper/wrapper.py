@@ -32,12 +32,12 @@ class DobotWrapper:
     def __init__(self, comport: str,xinverted: bool, yinverted: bool) -> None:
         self.__xinverted = xinverted
         self.__yinverted = yinverted
+        self.__conn = dType.load()
         self.__comport = comport
         pass
 
     # connect will open a connection with the robot on the specified comport
     def connect(self) -> bool:
-        self.__conn = dType.load()
         self.__state = dType.ConnectDobot(
             self.__conn, self.__comport, 115200)[0]
         if (self.__state == dType.DobotConnect.DobotConnect_NoError):

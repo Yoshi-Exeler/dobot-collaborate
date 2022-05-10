@@ -9,21 +9,25 @@ from wrapper.wrapper import DobotWrapper
 
 print("[Init] connecting to dobots")
 
-robotOne = DobotWrapper("COM3", False, False)
+robotOne = DobotWrapper("COM4", False, False)
+
+sleep(3)
 
 robotTwo = DobotWrapper("COM5", True, True)
 
 
-# if not (robotOne.connect()):
-#     print("[Init] connection with dobot one failed")
-#     exit(1337)
+sleep(3)
+
+if not (robotOne.connect()):
+    print("[Init] connection with dobot one failed")
+    exit(1337)
 
 
-# if not (robotTwo.connect()):
-#     print("[Init] connection with dobot two failed")
-#     exit(1337)
+if not (robotTwo.connect()):
+    print("[Init] connection with dobot two failed")
+    exit(1337)
 
-# print("[Init] both dobots are homed and ready")
+print("[Init] both dobots are homed and ready")
 
 print("[Init] creating game instance")
 
