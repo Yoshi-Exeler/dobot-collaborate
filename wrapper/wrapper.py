@@ -1,6 +1,9 @@
 from turtle import pos
 from dobot import DobotDllType as dType
 
+# Dobot DLL Wrapper written by Yoshi Exeler
+# You may use this wrapper in accordance with the provided license.
+
 CON_STR = {
     dType.DobotConnect.DobotConnect_NoError:  "DobotConnect_NoError",
     dType.DobotConnect.DobotConnect_NotFound: "DobotConnect_NotFound",
@@ -52,7 +55,7 @@ class DobotWrapper:
             dType.SetHOMEParams(self.__conn, 250, 0, 50, 0, isQueued=1)
             dType.SetHOMECmd(self.__conn, 0, isQueued=1)
             print("[Wrapper] command queue length: ", len(
-                dType.GetQueuedCmdMotionFinish(self.__conn), " awaiting homing completion"))
+                dType.GetQueuedCmdMotionFinish(self.__conn)), " awaiting homing completion")
             self.awaitMotionCompleted()  # block until homing has completed
             return True
         else:
