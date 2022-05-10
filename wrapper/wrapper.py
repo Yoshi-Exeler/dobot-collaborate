@@ -20,9 +20,8 @@ class Position:
         self.R = r
         pass
 
+
 # DobotWrapper is a simple wrapper class for the dobot c bindings, that aims to improve usability by provising a simpler interface
-
-
 class DobotWrapper:
     __comport: str
     __state: any
@@ -83,7 +82,7 @@ class DobotWrapper:
         # run the move
         await self.move(position)
 
-    
+
     # moveRight will move the robot right, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
     async def moveRight(self, amount: float) -> None:
@@ -97,7 +96,7 @@ class DobotWrapper:
         # run the move
         await self.move(position)
 
-    
+
     # moveForward will move the robot forwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
     async def moveForward(self, amount: float) -> None:
@@ -111,7 +110,7 @@ class DobotWrapper:
         # run the move
         await self.move(position)
 
-    
+
     # moveBackward will move the robot backwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
     async def moveBackward(self, amount: float) -> None:
@@ -125,7 +124,7 @@ class DobotWrapper:
         # run the move
         await self.move(position)
 
-    
+
     # moveUp will move the robot up. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
     async def moveUp(self, amount: float) -> None:
@@ -136,8 +135,8 @@ class DobotWrapper:
         # run the move
         await self.move(position)
 
-    
-    
+
+
     # moveDown will move the robot down. Like move, this action will run asynchronously by default. If you want
     # to run this synchronously use await.
     async def moveDown(self, amount: float) -> None:
@@ -148,7 +147,7 @@ class DobotWrapper:
         # run the move
         await self.move(position)
 
-        # setSuckState sets the state of the sucktion cup on the dobot magician
+    # setSuckState sets the state of the sucktion cup on the dobot magician
     def setSuckState(self, state: bool) -> None:
         conv_state = 0
         if (state):

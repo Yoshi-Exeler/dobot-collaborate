@@ -26,7 +26,7 @@ class HumanPlayer:
             # ... react to the state here
             print("[HumanPlayer] end turn")
             self.__game.passTurn()
-            
+
 
     def __queryUserForTurn(self) -> int:
         # returns the index of the cell that the AI wants to place a symbol in
