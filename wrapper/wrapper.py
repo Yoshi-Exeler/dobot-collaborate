@@ -1,5 +1,6 @@
 from turtle import pos
 from dobot import DobotDllType as dType
+from dobot2 import DobotDllType2 as dType2
 
 # Dobot DLL Wrapper written by Yoshi Exeler
 # You may use this wrapper in accordance with the provided license.
@@ -32,10 +33,13 @@ class DobotWrapper:
     __xinverted: bool
     __yinverted: bool
 
-    def __init__(self, comport: str,xinverted: bool, yinverted: bool) -> None:
+    def __init__(self, comport: str,xinverted: bool, yinverted: bool, dobot2: bool) -> None:
         self.__xinverted = xinverted
         self.__yinverted = yinverted
-        self.__conn = dType.load()
+        if dobot2:
+            self.__conn = dType2.load()
+        else:
+            self.__conn = dType.load()
         self.__comport = comport
         pass
 

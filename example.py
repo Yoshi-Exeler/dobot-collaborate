@@ -5,8 +5,8 @@ import asyncio
 DOBOT_ONE_PORT = "COM6"
 DOBOT_TWO_PORT = "COM5"
 
-robot_one = DobotWrapper(DOBOT_ONE_PORT,False,False)
-robot_two = DobotWrapper(DOBOT_TWO_PORT,True,True)
+robot_one = DobotWrapper(DOBOT_ONE_PORT,False,False,False)
+robot_two = DobotWrapper(DOBOT_TWO_PORT,True,True,True)
 
 if not (robot_one.connect()):
     print("connection with dobot one failed")
