@@ -65,7 +65,7 @@ class DobotWrapper:
 
     # move will add a move command to the desired target state to the command queue and then block until the move has been executed by the robot.
     # You can either run this with await 'await robot.move(mytarget)' to run the move synchronously or without await to run it asynchronously.
-    async def move(self, target: Position) -> None:
+    def move(self, target: Position) -> None:
         # add our command to the command queue
         dType.SetPTPCmdEx(self.__conn, 2, target.X,
                           target.Y,  target.Z, target.R, 1)
