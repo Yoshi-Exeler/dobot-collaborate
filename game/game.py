@@ -56,7 +56,7 @@ class Renderer:
                 return i
         return -1
 
-    async def placeSymbol(self, index: int, symbol: str):
+    def placeSymbol(self, index: int, symbol: str):
         # TODO we should probably pass most of these as parameters
         # setting some measurements for the symbols
         down = 10
@@ -75,7 +75,7 @@ class Renderer:
         target = Position(pos.X+offset.X, pos.Y+offset.Y,
                           pos.Z+offset.Z, pos.R+offset.R)
         # move to the target position
-        await robot.move(target)
+        robot.move(target)
         # draw the symbols
         if symbol == PLAYER_ONE_SYMBOL:
             self.drawX(robot, target, down, size)
@@ -83,8 +83,12 @@ class Renderer:
             self.drawO(robot, target, down, corners, size)
         else:
             print("Cannot draw symbols other thatn X or O")
+        # block until the previoius move completed
+        robot.awaitMotionCompleted()
         # move back to the starting position
-        await robot.move(pos)
+        robot.move(pos)
+        # block until we are back at the resting position
+        robot.awaitMotionCompleted()
 
     def drawX(robot, target, deltaZ, size):
         # defining the corner points for readability
