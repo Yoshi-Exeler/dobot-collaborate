@@ -19,7 +19,6 @@ offsets.append(Position(50, 0, 0, 0))
 offsets.append(Position(-50, -50, 0, 0))
 offsets.append(Position(0, -50, 0, 0))
 offsets.append(Position(50, -50, 0, 0))
-DEBUG = True
 
 
 class Renderer:
@@ -35,22 +34,10 @@ class Renderer:
         self.__renderState = List[str]
         pass
 
-    def __renderCell(self, board, position):
-        if board[position] == "":
-            return "   "
-        else:
-            return " " + board[position] + " "
-
     def render(self, board: List[str]):
         # first we print the state to stdout
         if DEBUG:
-            print()
-            print(self.__renderCell(board, 0) + "│" + self.__renderCell(board, 1) + "│" + self.__renderCell(board, 2))
-            print("───┼───┼───")
-            print(self.__renderCell(board, 3) + "│" + self.__renderCell(board, 4) + "│" + self.__renderCell(board, 5))
-            print("───┼───┼───")
-            print(self.__renderCell(board, 6) + "│" + self.__renderCell(board, 7) + "│" + self.__renderCell(board, 8))
-            print()
+            self.__debugRender(board)
             return
         # get the cell where the last move was made
         deltaCell = self.findDeltaCell(board)
@@ -98,7 +85,7 @@ class Renderer:
             print("Cannot draw symbols other thatn X or O")
         # move back to the starting position
         await robot.move(pos)
-    
+
     def drawX(robot, target, deltaZ, size):
         # defining the corner points for readability
         upperX = target.X + size/2
@@ -108,7 +95,7 @@ class Renderer:
         zUp = target.Z
         zDown = target.Z - deltaZ
         r = target.r
-        
+
         #actual drawing begins
         robot.move(Position(upperX, upperY, zUp, r))
         robot.moveDown(deltaZ)
@@ -118,12 +105,12 @@ class Renderer:
         robot.moveDown(deltaZ)
         robot.move(Position(upperX, lowerY, zDown, r))
         robot.moveUp(deltaZ)
-    
+
     def drawO(robot, target, deltaZ, corners, size):
         #draws a regular polygon with specified number of corners
         #more corners make the polygon closer to a circle, but take longer
         #circles would require a new, complicated movement function that cannot be achieved with PTP commands
-        
+
         #getting in position
         targetReady= Position(target.X, target.Y+size/2, target.Z, target.R)
         zDown = target.Z-deltaZ
@@ -137,13 +124,25 @@ class Renderer:
             #draws line to next corner
             point = Position(cornerX, cornerY, zDown, target.r)
             robot.move(point)
-        
+
         robot.moveUp(deltaZ)
 
+    def __debugRender(self, board):
+        # sould render a text based representation of the board to the standard output.
+        # This should be called after every placeSymbol call when DEBUG is set to true.
+        print()
+        print(self.__renderCell(board, 0) + "│" + self.__renderCell(board, 1) + "│" + self.__renderCell(board, 2))
+        print("───┼───┼───")
+        print(self.__renderCell(board, 3) + "│" + self.__renderCell(board, 4) + "│" + self.__renderCell(board, 5))
+        print("───┼───┼───")
+        print(self.__renderCell(board, 6) + "│" + self.__renderCell(board, 7) + "│" + self.__renderCell(board, 8))
+        print()
 
-
-
-
+    def __renderCell(self, board, position):
+        if board[position] == "":
+            return "   "
+        else:
+            return " " + board[position] + " "
 
 class TicTacToe:
     __board: List[str]  # board representation
@@ -221,9 +220,3 @@ class TicTacToe:
 
         # Else, game is a tie
         return 3
-
-    def __debugRender(self):
-        # sould render a text based representation of the board to the standard output.
-        # This should be called after every placeSymbol call when DEBUG is set to true.
-        pass
-
