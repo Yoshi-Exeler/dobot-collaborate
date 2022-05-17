@@ -7,7 +7,7 @@ import math
 
 PLAYER_ONE_SYMBOL = 'X'
 PLAYER_TWO_SYMBOL = 'O'
-DEBUG = True
+DEBUG = False
 
 offsets = []
 offsets.append(Position(-50, 50, 0, 0))
@@ -31,7 +31,7 @@ class Renderer:
         self.__robotOne = robotOne
         self.__robotTwo = robotTwo
         self.__toggle = False
-        self.__renderState = List[str]
+        self.__renderState = ["","","","","","","","",""]
         pass
 
     def render(self, board: List[str]):
