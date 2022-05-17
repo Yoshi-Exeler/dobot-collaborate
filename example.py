@@ -2,7 +2,7 @@ from time import sleep
 from wrapper.wrapper import DobotWrapper, Position
 import asyncio
 
-DOBOT_ONE_PORT = "COM3"
+DOBOT_ONE_PORT = "COM6"
 DOBOT_TWO_PORT = "COM5"
 
 robot_one = DobotWrapper(DOBOT_ONE_PORT,False,False)
