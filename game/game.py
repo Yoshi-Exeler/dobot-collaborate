@@ -5,8 +5,8 @@ from wrapper.wrapper import DobotWrapper, Position
 from game.game import *
 import math
 
-PLAYER_ONE_SYMBOL = 'O'
-PLAYER_TWO_SYMBOL = "X"
+PLAYER_ONE_SYMBOL = 'X'
+PLAYER_TWO_SYMBOL = 'O'
 DEBUG = True
 
 offsets = []
@@ -35,12 +35,22 @@ class Renderer:
         self.__renderState = List[str]
         pass
 
+    def __renderCell(self, board, position):
+        if board[position] == "":
+            return "   "
+        else:
+            return " " + board[position] + " "
+
     def render(self, board: List[str]):
         # first we print the state to stdout
-        print(board[0], board[1], board[2])
-        print(board[3], board[4], board[5])
-        print(board[6], board[7], board[8])
         if DEBUG:
+            print()
+            print(self.__renderCell(board, 0) + "│" + self.__renderCell(board, 1) + "│" + self.__renderCell(board, 2))
+            print("───┼───┼───")
+            print(self.__renderCell(board, 3) + "│" + self.__renderCell(board, 4) + "│" + self.__renderCell(board, 5))
+            print("───┼───┼───")
+            print(self.__renderCell(board, 6) + "│" + self.__renderCell(board, 7) + "│" + self.__renderCell(board, 8))
+            print()
             return
         # get the cell where the last move was made
         deltaCell = self.findDeltaCell(board)
@@ -155,6 +165,12 @@ class TicTacToe:
     def placeSymbol(self, position: int) -> bool:
         # places the symbol of the active player at the specified position,
         # ensuring that the position is empty. If the position is not empty, returns false
+
+        print(position)
+
+        # What the fuck is this ternary operator syntax???
+        self.__board[position] = PLAYER_ONE_SYMBOL if self.__playerOneTurn else PLAYER_TWO_SYMBOL
+
         self.__renderer.render(self.__board)
         pass
 
@@ -164,10 +180,47 @@ class TicTacToe:
     def getBoard(self) -> List[str]:
         return self.__board
 
+    def getTurn(self) -> int:
+        return self.__playerOneTurn
+
     def getGameState(self) -> int:
+        return self.evaluate(self.__board)
+
+    def evaluate(self, board) -> int:
         # returns the state of the game as an integer 'enum'
         # 0 = in_progress, 1 = player_one_won, 2 = player_two_one, 3 = tied
-        pass
+
+        # Check win
+        for player in ("X", "O"):
+            # Horizontal Win
+            if board[0] == player and board[1] == player and board[2] == player:
+                return 1 if player == "X" else 2
+            if board[3] == player and board[4] == player and board[5] == player:
+                return 1 if player == "X" else 2
+            if board[6] == player and board[7] == player and board[8] == player:
+                return 1 if player == "X" else 2
+
+            # Vertical Win
+            if board[0] == player and board[3] == player and board[6] == player:
+                return 1 if player == "X" else 2
+            if board[1] == player and board[4] == player and board[7] == player:
+                return 1 if player == "X" else 2
+            if board[2] == player and board[5] == player and board[8] == player:
+                return 1 if player == "X" else 2
+
+            # Diagonal Win
+            if board[0] == player and board[4] == player and board[8] == player:
+                return 1 if player == "X" else 2
+            if board[2] == player and board[4] == player and board[6] == player:
+                return 1 if player == "X" else 2
+
+        # Check if there are possible moves left
+        for position in board:
+            if position == "":
+                return 0
+
+        # Else, game is a tie
+        return 3
 
     def __debugRender(self):
         # sould render a text based representation of the board to the standard output.
