@@ -68,7 +68,7 @@ class DobotWrapper:
     def move(self, target: Position) -> None:
         # add our command to the command queue
         dType.SetPTPCmdEx(self.__conn, 2, target.X,
-                          target.Y,  target.Z, target.R, 1)
+                          target.Y,  target.Z, target.R, 0)
         pass
 
     # moveLeft will move the robot left, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
