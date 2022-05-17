@@ -90,7 +90,7 @@ class Renderer:
         # block until we are back at the resting position
         robot.awaitMotionCompleted()
 
-    def drawX(robot, target, deltaZ, size):
+    def drawX(self, robot, target, deltaZ, size):
         # defining the corner points for readability
         upperX = target.X + size/2
         lowerX = target.X - size/2
@@ -98,7 +98,7 @@ class Renderer:
         lowerY = target.Y - size/2
         zUp = target.Z
         zDown = target.Z - deltaZ
-        r = target.r
+        r = target.R
 
         #actual drawing begins
         robot.move(Position(upperX, upperY, zUp, r))
@@ -110,7 +110,7 @@ class Renderer:
         robot.move(Position(upperX, lowerY, zDown, r))
         robot.moveUp(deltaZ)
 
-    def drawO(robot, target, deltaZ, corners, size):
+    def drawO(self, robot, target, deltaZ, corners, size):
         #draws a regular polygon with specified number of corners
         #more corners make the polygon closer to a circle, but take longer
         #circles would require a new, complicated movement function that cannot be achieved with PTP commands
@@ -126,7 +126,7 @@ class Renderer:
             cornerY = target.Y + size/2 * math.sin(i*2*math.pi/corners)
 
             #draws line to next corner
-            point = Position(cornerX, cornerY, zDown, target.r)
+            point = Position(cornerX, cornerY, zDown, target.R)
             robot.move(point)
 
         robot.moveUp(deltaZ)
