@@ -47,7 +47,7 @@ class Renderer:
         # get the symbol that was last placed
         symbolPlaced = board[deltaCell]
         # place this symbol on the paper using the current player's dobot
-        self.__placeSymbol(deltaCell, symbolPlaced)
+        self.placeSymbol(deltaCell, symbolPlaced)
         # update the render state
         self.__renderState = board
         # flip the toggle so the other dodot will be used next
@@ -59,7 +59,7 @@ class Renderer:
                 return i
         return -1
 
-    async def __placeSymbol(self, index: int, symbol: str):
+    async def placeSymbol(self, index: int, symbol: str):
         # TODO we should probably pass most of these as parameters
         # setting some measurements for the symbols
         down = 10
