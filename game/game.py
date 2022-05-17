@@ -59,7 +59,7 @@ class Renderer:
                 return i
         return -1
 
-    async def placeSymbol(self, index: int, symbol: str):
+    async def __placeSymbol(self, index: int, symbol: str):
         # TODO we should probably pass most of these as parameters
         # setting some measurements for the symbols
         down = 10
