@@ -18,7 +18,12 @@ if not (robot_two.connect()):
     exit(1337)
 
 # finally, we will run two movements at the same time
-robot_one.move(Position(30, 30, 30, 0))
-robot_two.move(Position(-30, -30, -30, 0))
 
+# grab the current position
+pos = robot_one.getPosition()
+pos.X += 5
+robot_one.move(pos)
+pos_two = robot_two.getPosition()
+pos_two.X += 5
+robot_two.move(pos_two)
 sleep(10)
