@@ -1,3 +1,4 @@
+from time import sleep
 from wrapper.wrapper import DobotWrapper, Position
 import asyncio
 
@@ -19,3 +20,5 @@ if not (robot_two.connect()):
 # finally, we will run two movements at the same time
 robot_one.move(Position(30, 30, 30, 0))
 robot_two.move(Position(-30, -30, -30, 0))
+
+sleep(10)
