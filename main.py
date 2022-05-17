@@ -9,29 +9,35 @@ from wrapper.wrapper import DobotWrapper, Position
 
 print("[Init] connecting to dobots")
 
-robotOne = DobotWrapper("COM6", False, False,False)
+DOBOT_ONE_PORT = "COM6"
+DOBOT_TWO_PORT = "COM5"
 
-sleep(3)
+robot_one = DobotWrapper(DOBOT_ONE_PORT,False,False,False)
+robot_two = DobotWrapper(DOBOT_TWO_PORT,True,True,True)
 
-robotTwo = DobotWrapper("COM5", True, True,True)
+rest_pos_one = Position(85,-160,42,-65)
 
-sleep(3)
+rest_pos_two = Position(130,146,36,48)
 
-if not (robotOne.connect()):
-    print("[Init] connection with dobot one failed")
+if not (robot_one.connect()):
+    print("connection with dobot one failed")
     exit(1337)
 
+robot_one.move(rest_pos_one)
 
-if not (robotTwo.connect()):
-    print("[Init] connection with dobot two failed")
+
+if not (robot_two.connect()):
+    print("connection with dobot two failed")
     exit(1337)
+
+robot_two.move(rest_pos_two)
 
 print("[Init] both dobots are homed and ready")
 
 print("[Init] creating game instance")
 
 # create our renderer instance
-renderer = Renderer(robotOne, robotTwo)
+renderer = Renderer(robot_one, robot_two)
 
 # Create a game instance to be used
 gameInstance = TicTacToe(renderer)
