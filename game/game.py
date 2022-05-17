@@ -77,9 +77,9 @@ class Renderer:
         # move to the target position
         await robot.move(target)
         # draw the symbols
-        if symbol == "X":
+        if symbol == PLAYER_ONE_SYMBOL:
             self.drawX(robot, target, down, size)
-        elif symbol == "O":
+        elif symbol == PLAYER_TWO_SYMBOL:
             self.drawO(robot, target, down, corners, size)
         else:
             print("Cannot draw symbols other thatn X or O")
