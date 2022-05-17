@@ -59,9 +59,9 @@ class Renderer:
     def placeSymbol(self, index: int, symbol: str):
         # TODO we should probably pass most of these as parameters
         # setting some measurements for the symbols
-        down = 10
+        down = 15
         corners = 16
-        size = 4
+        size = 35
 
         # get our dobot instance
         robot = self.__robotOne
@@ -82,7 +82,7 @@ class Renderer:
         elif symbol == PLAYER_TWO_SYMBOL:
             self.drawO(robot, target, down, corners, size)
         else:
-            print("Cannot draw symbols other thatn X or O")
+            print("ERROR: Tried to draw undefined symbol.")
         # block until the previoius move completed
         robot.awaitMotionCompleted()
         # move back to the starting position
@@ -120,10 +120,10 @@ class Renderer:
         zDown = target.Z-deltaZ
         robot.move(targetReady)
 
-        for i in range(corners):
+        for i in range(corners+1):
             #transforms the polar coordinates into cartesian to find next corner
-            cornerX = target.X + size/2 * math.cos(i*2*math.pi/corners)
-            cornerY = target.Y + size/2 * math.sin(i*2*math.pi/corners)
+            cornerX = target.X + size/2 * math.sin(i*2*math.pi/corners)
+            cornerY = target.Y + size/2 * math.cos(i*2*math.pi/corners)
 
             #draws line to next corner
             point = Position(cornerX, cornerY, zDown, target.R)
