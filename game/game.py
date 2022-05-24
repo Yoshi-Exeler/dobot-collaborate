@@ -5,8 +5,8 @@ from wrapper.wrapper import DobotWrapper, Position
 from game.game import *
 import math
 
-PLAYER_ONE_SYMBOL = 'X'
-PLAYER_TWO_SYMBOL = 'O'
+PLAYER_ONE_SYMBOL = "X"
+PLAYER_TWO_SYMBOL = "O"
 DEBUG = False
 
 offsets = []
@@ -41,17 +41,22 @@ class Renderer:
             return
         # get the cell where the last move was made
         deltaCell = self.findDeltaCell(board)
+        print(deltaCell)
         # get the symbol that was last placed
         symbolPlaced = board[deltaCell]
+        print(symbolPlaced)
         # place this symbol on the paper using the current player's dobot
         self.placeSymbol(deltaCell, symbolPlaced)
         # update the render state
-        self.__renderState = board
+        self.__renderState = [*board]
         # flip the toggle so the other dodot will be used next
         self.__toggle = not self.__toggle
 
     def findDeltaCell(self, board: List[str]) -> int:
+        print(board)
+        print(self.__renderState)
         for i in range(len(board)):
+            print("checking", i)
             if not board[i] == self.__renderState[i]:
                 return i
         return -1
@@ -65,12 +70,14 @@ class Renderer:
 
         # get our dobot instance
         robot = self.__robotOne
+        pos = Position(146.3895, -4.0591, -44.2702, 13.5573)
         if self.__toggle:
             robot = self.__robotTwo
+            pos = Position(181.2103, 2.5953, -43.2999, 0.5028)
         # get the offset for the target field
         offset = offsets[index]
         # get our current position
-        pos = robot.getPosition()
+        #pos = robot.getPosition()
         # compute our target position
         target = Position(pos.X+offset.X, pos.Y+offset.Y,
                           pos.Z+offset.Z, pos.R+offset.R)
@@ -83,10 +90,20 @@ class Renderer:
             self.drawO(robot, target, down, corners, size)
         else:
             print("ERROR: Tried to draw undefined symbol.")
+        
+        print("draw")
+        print(symbol)
         # block until the previoius move completed
         robot.awaitMotionCompleted()
         # move back to the starting position
-        robot.move(pos)
+        #robot.move(pos)
+        if not self.__toggle:
+            #robot one
+            robot.move(Position(85,-160,42,-65))
+        else:
+            #robot two
+            robot.move(Position(130,146,36,48))
+
         # block until we are back at the resting position
         robot.awaitMotionCompleted()
 
@@ -172,9 +189,16 @@ class TicTacToe:
         print(position)
 
         # What the fuck is this ternary operator syntax???
-        self.__board[position] = PLAYER_ONE_SYMBOL if self.__playerOneTurn else PLAYER_TWO_SYMBOL
+        #self.__board[position] = PLAYER_ONE_SYMBOL if self.__playerOneTurn else PLAYER_TWO_SYMBOL
+        if self.__playerOneTurn:
+            self.__board[position] = PLAYER_ONE_SYMBOL
+        else:
+            self.__board[position] = PLAYER_TWO_SYMBOL
+
+        print(self.__board[position])
 
         self.__renderer.render(self.__board)
+        print(self.__board)
         pass
 
     def passTurn(self):
