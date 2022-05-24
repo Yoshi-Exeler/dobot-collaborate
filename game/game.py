@@ -169,8 +169,6 @@ class TicTacToe:
         # places the symbol of the active player at the specified position,
         # ensuring that the position is empty. If the position is not empty, returns false
 
-        print(position)
-
         # What the fuck is this ternary operator syntax???
         self.__board[position] = PLAYER_ONE_SYMBOL if self.__playerOneTurn else PLAYER_TWO_SYMBOL
 
