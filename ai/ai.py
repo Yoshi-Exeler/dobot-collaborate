@@ -2,18 +2,26 @@ from game.game import TicTacToe
 import game
 import asyncio
 import random
-
+import math
 
 class AIPlayer:
     __game: TicTacToe
+    __invertMinimax: False
 
     def __init__(self, game: TicTacToe):
         self.__game = game
+        self.__invertMinimax = False
+
+        # Decide whether or not to play like an idiot
+        if math.floor(random.random() * 15) == 0:
+            self.__invertMinimax = True
+            print("\n[AIPlayer] Computer is going to play really bad\n")
+
         print("[AIPlayer] initialized")
-        pass
 
     async def run(self):
         print("[AIPlayer] enter main loop")
+
         while True:
             # first, block until its our turn
             await self.__game.awaitTurn(False)
@@ -46,12 +54,12 @@ class AIPlayer:
         if depth == 0 or self.__evaluate(board) != 0:
             return (board, self.__evaluate(board))
 
-        if isMaximizing:
+        if isMaximizing ^ self.__invertMinimax:
             # Human is maximizing player
             bestMoves = []
             bestScore = -69
             for child in self.__findPossibleMoves(board):
-                (void, score) = self.__findMove(self.__makeMove(board, child, isMaximizing), depth - 1, False)
+                (void, score) = self.__findMove(self.__makeMove(board, child, isMaximizing ^ self.__invertMinimax), depth - 1, False)
 
                 if score >= bestScore:
                     if score > bestScore:
@@ -66,7 +74,7 @@ class AIPlayer:
             bestMoves = []
             bestScore = 69
             for child in self.__findPossibleMoves(board):
-                (void, score) = self.__findMove(self.__makeMove(board, child, isMaximizing), depth - 1, True)
+                (void, score) = self.__findMove(self.__makeMove(board, child, isMaximizing ^ self.__invertMinimax), depth - 1, True)
 
                 if score <= bestScore:
                     if score < bestScore:

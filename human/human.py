@@ -48,8 +48,13 @@ class HumanPlayer:
                 elif field >= 7:
                     field -= 6
 
-                print("You selected field", field - 1)
-                return field - 1
+                field -= 1
+
+                print(self.__game.getBoard()[field])
+                if self.__game.getBoard()[field] != "":
+                    raise ValueError
+
+                return field
             except ValueError:
-                print("\nOnly values from 1 to 9 allowed.\n")
+                print("\nOnly empty fields (from 1 to 9) allowed.\n")
 
