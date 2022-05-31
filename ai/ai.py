@@ -48,32 +48,38 @@ class AIPlayer:
         (move, score) = self.__findMove(self.__game.getBoard(), len(self.__findPossibleMoves(self.__game.getBoard())), self.__game.getTurn())
         return move
 
-    # Utilizes the minimax to find the best move and returns the move (index of the list)
+    # utilizes the minimax algoritm to find the best move and returns the move (index of the list)
     def __findMove(self, board, depth, isMaximizing) -> (int, int):
-
+        # return the evaluation of the current board if we are at the frontier or the current board is a win/draw
         if depth == 0 or self.__evaluate(board) != 0:
             return (board, self.__evaluate(board))
 
+        # if this iteration is maximizing the evaluation
         if isMaximizing ^ self.__invertMinimax:
-            # Human is maximizing player
+            # prepare the movelist
             bestMoves = []
             bestScore = -69
+            # generate the children of the current node and iterate over them
             for child in self.__findPossibleMoves(board):
+                # recursively find the maximum within the children of this node
                 (void, score) = self.__findMove(self.__makeMove(board, child, isMaximizing ^ self.__invertMinimax), depth - 1, False)
-
+                
                 if score >= bestScore:
                     if score > bestScore:
                         bestScore = score
                         bestMoves.clear()
                     bestMoves.append(child)
-
+            # yield a random move of the moves tied for bestmove, to decrease deteminism
             return (random.choice(bestMoves), bestScore)
-
+        
+        # if this iteration is maximizing the evaluation
         else:
-            # AI is minimizing player
+            # prepare the movelist
             bestMoves = []
             bestScore = 69
+            # generate the children of the current node and iterate over them
             for child in self.__findPossibleMoves(board):
+                # recursively find the minimum within the children of this node
                 (void, score) = self.__findMove(self.__makeMove(board, child, isMaximizing ^ self.__invertMinimax), depth - 1, True)
 
                 if score <= bestScore:
@@ -81,9 +87,11 @@ class AIPlayer:
                         bestScore = score
                         bestMoves.clear()
                     bestMoves.append(child)
-
+            
+            # yield a random move of the moves tied for bestmove, to decrease deteminism
             return (random.choice(bestMoves), bestScore)
 
+    # returns all possible child moves from the specified board
     def __findPossibleMoves(self, board):
         possibleMoves = []
         for position in range(len(board)):
@@ -91,11 +99,13 @@ class AIPlayer:
                 possibleMoves.append(position)
         return possibleMoves
 
+    # plays the specified move on the board
     def __makeMove(self, board, position, isMaximizing):
         boardWithMove = board.copy()
         boardWithMove[position] = 'X' if isMaximizing else 'O'
         return boardWithMove
 
+    # returns the evaluation of the specified board
     def __evaluate(self, board) -> int:
         evaluation = self.__game.evaluate(board)
 
