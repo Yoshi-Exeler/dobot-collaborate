@@ -1,9 +1,29 @@
-from turtle import pos
+'''
+MIT License
+
+Copyright (c) 2022 Yoshi Noah Exeler
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+'''
 from dobot import DobotDllType as dType
 from dobot2 import DobotDllType2 as dType2
 
-# Dobot DLL Wrapper written by Yoshi Exeler
-# You may use this wrapper in accordance with the provided license.
 
 CON_STR = {
     dType.DobotConnect.DobotConnect_NoError:  "DobotConnect_NoError",
@@ -25,7 +45,7 @@ class Position:
         pass
 
 
-# DobotWrapper is a simple wrapper class for the dobot c bindings, that aims to improve usability by provising a simpler interface
+# DobotWrapper is a simple wrapper class for the dobot c bindings, that aims to improve usability by providing a simpler interface
 class DobotWrapper:
     __comport: str
     __state: any
@@ -33,6 +53,9 @@ class DobotWrapper:
     __xinverted: bool
     __yinverted: bool
 
+    # Creates a wrapper for the dobot reachable on the specified comport.
+    # xinverted and yinverted specify wether the directional moves will be inverted on that axis
+    # dobot2 specifies wether to use the duplicate dobot interface, use this if you want to interact with a second dobot
     def __init__(self, comport: str,xinverted: bool, yinverted: bool, dobot2: bool) -> None:
         self.__xinverted = xinverted
         self.__yinverted = yinverted
@@ -43,7 +66,7 @@ class DobotWrapper:
         self.__comport = comport
         pass
 
-    # connect will open a connection with the robot on the specified comport
+    # connect will open a connection with the robot on the specified comport and home it
     def connect(self) -> bool:
         self.__state = dType.ConnectDobot(
             self.__conn, self.__comport, 115200)[0]
@@ -67,8 +90,7 @@ class DobotWrapper:
 
         pass
 
-    # move will add a move command to the desired target state to the command queue and then block until the move has been executed by the robot.
-    # You can either run this with await 'await robot.move(mytarget)' to run the move synchronously or without await to run it asynchronously.
+    # move will add a move command to the desired target state to the command queue
     def move(self, target: Position) -> None:
         dType.SetQueuedCmdClear(self.__conn)
         dType.SetQueuedCmdStartExec(self.__conn)   
@@ -77,8 +99,7 @@ class DobotWrapper:
                           target.Y,  target.Z, target.R, 1)
         pass
 
-    # moveLeft will move the robot left, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
-    # to run this synchronously use await.
+    # moveLeft will move the robot left, respecting the configured inverts.
     def moveLeft(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
@@ -91,8 +112,7 @@ class DobotWrapper:
         self.move(position)
 
 
-    # moveRight will move the robot right, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
-    # to run this synchronously use await.
+    # moveRight will move the robot right, respecting the configured inverts.
     def moveRight(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
@@ -105,8 +125,7 @@ class DobotWrapper:
         self.move(position)
 
 
-    # moveForward will move the robot forwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
-    # to run this synchronously use await.
+    # moveForward will move the robot forwards, respecting the configured inverts.
     def moveForward(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
@@ -119,8 +138,7 @@ class DobotWrapper:
         self.move(position)
 
 
-    # moveBackward will move the robot backwards, respecting the configured inverts. Like move, this action will run asynchronously by default. If you want
-    # to run this synchronously use await.
+    # moveBackward will move the robot backwards, respecting the configured inverts.
     def moveBackward(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
@@ -133,8 +151,7 @@ class DobotWrapper:
         self.move(position)
 
 
-    # moveUp will move the robot up. Like move, this action will run asynchronously by default. If you want
-    # to run this synchronously use await.
+    # moveUp will move the robot up.
     def moveUp(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
@@ -145,8 +162,7 @@ class DobotWrapper:
 
 
 
-    # moveDown will move the robot down. Like move, this action will run asynchronously by default. If you want
-    # to run this synchronously use await.
+    # moveDown will move the robot down.
     def moveDown(self, amount: float) -> None:
         # get the current position
         position = self.getPosition()
