@@ -7,6 +7,7 @@ import math
 
 PLAYER_ONE_SYMBOL = "X"
 PLAYER_TWO_SYMBOL = "O"
+# factor for Y coordinates to counteract stretching, set actual value later
 DEBUG = False
 
 offsets = []
@@ -48,6 +49,7 @@ class Renderer:
         # place this symbol on the paper using the current player's dobot
         self.placeSymbol(deltaCell, symbolPlaced)
         # update the render state
+        # the * is so the values are passed instead of the reference
         self.__renderState = [*board]
         # flip the toggle so the other dodot will be used next
         self.__toggle = not self.__toggle
@@ -65,22 +67,28 @@ class Renderer:
         # TODO we should probably pass most of these as parameters
         # setting some measurements for the symbols
         down = 15
-        corners = 16
+        corners = 32
         size = 35
 
         # get our dobot instance
+        # move to centre position
         robot = self.__robotOne
-        pos = Position(146.3895, -4.0591, -44.2702, 13.5573)
+        pos = Position(176.4841, -4.2408, -40.2702, 13.5573)
         if self.__toggle:
             robot = self.__robotTwo
-            pos = Position(181.2103, 2.5953, -43.2999, 0.5028)
+            pos = Position(181.2103, 2.5953, -39.2999, 0.5028)
         # get the offset for the target field
         offset = offsets[index]
-        # get our current position
-        #pos = robot.getPosition()
+
         # compute our target position
-        target = Position(pos.X+offset.X, pos.Y+offset.Y,
-                          pos.Z+offset.Z, pos.R+offset.R)
+        #target = Position(pos.X+offset.X, pos.Y+offset.Y,
+        #                  pos.Z+offset.Z, pos.R+offset.R)
+        if self.__toggle:
+            target = Position(pos.X+offset.X, pos.Y+offset.Y,
+                              pos.Z+offset.Z, pos.R+offset.R)
+        else:
+            target = Position(pos.X-offset.X, pos.Y-offset.Y,
+                              pos.Z+offset.Z, pos.R+offset.R)
         # move to the target position
         robot.move(target)
         # draw the symbols
@@ -95,8 +103,8 @@ class Renderer:
         print(symbol)
         # block until the previoius move completed
         robot.awaitMotionCompleted()
-        # move back to the starting position
-        #robot.move(pos)
+
+        # move to resting position
         if not self.__toggle:
             #robot one
             robot.move(Position(85,-160,42,-65))
@@ -133,7 +141,7 @@ class Renderer:
         #circles would require a new, complicated movement function that cannot be achieved with PTP commands
 
         #getting in position
-        targetReady= Position(target.X, target.Y+size/2, target.Z, target.R)
+        targetReady= Position(target.X, target.Y + size/2, target.Z, target.R)
         zDown = target.Z-deltaZ
         robot.move(targetReady)
 
@@ -186,8 +194,7 @@ class TicTacToe:
         # places the symbol of the active player at the specified position,
         # ensuring that the position is empty. If the position is not empty, returns false
 
-        # What the fuck is this ternary operator syntax???
-        #self.__board[position] = PLAYER_ONE_SYMBOL if self.__playerOneTurn else PLAYER_TWO_SYMBOL
+        #setting the symbol
         if self.__playerOneTurn:
             self.__board[position] = PLAYER_ONE_SYMBOL
         else:
