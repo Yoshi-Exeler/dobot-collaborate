@@ -7,7 +7,6 @@ import math
 
 PLAYER_ONE_SYMBOL = "X"
 PLAYER_TWO_SYMBOL = "O"
-# factor for Y coordinates to counteract stretching, set actual value later
 DEBUG = False
 
 offsets = []
@@ -63,8 +62,7 @@ class Renderer:
                 return i
         return -1
 
-    def placeSymbol(self, index: int, symbol: str):
-        # TODO we should probably pass most of these as parameters
+    def placeSymbol(self, index: int, symbol: str): 
         # setting some measurements for the symbols
         down = 15
         corners = 32
@@ -81,8 +79,6 @@ class Renderer:
         offset = offsets[index]
 
         # compute our target position
-        #target = Position(pos.X+offset.X, pos.Y+offset.Y,
-        #                  pos.Z+offset.Z, pos.R+offset.R)
         if self.__toggle:
             target = Position(pos.X+offset.X, pos.Y+offset.Y,
                               pos.Z+offset.Z, pos.R+offset.R)
