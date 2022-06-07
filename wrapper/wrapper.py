@@ -93,7 +93,7 @@ class DobotWrapper:
     # move will add a move command to the desired target state to the command queue
     def move(self, target: Position) -> None:
         dType.SetQueuedCmdClear(self.__conn)
-        dType.SetQueuedCmdStartExec(self.__conn)   
+        dType.SetQueuedCmdStartExec(self.__conn)
         # add our command to the command queue
         dType.SetPTPCmdEx(self.__conn, 2, target.X,
                           target.Y,  target.Z, target.R, 1)

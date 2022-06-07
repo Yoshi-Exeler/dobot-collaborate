@@ -62,7 +62,7 @@ class Renderer:
                 return i
         return -1
 
-    def placeSymbol(self, index: int, symbol: str): 
+    def placeSymbol(self, index: int, symbol: str):
         # setting some measurements for the symbols
         down = 15
         corners = 32
@@ -94,7 +94,7 @@ class Renderer:
             self.drawO(robot, target, down, corners, size)
         else:
             print("ERROR: Tried to draw undefined symbol.")
-        
+
         print("draw")
         print(symbol)
         # block until the previoius move completed
